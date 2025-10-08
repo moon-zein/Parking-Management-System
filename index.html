@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login - Parking Management</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+    body {
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: radial-gradient(circle, rgba(238,174,202,1) 0%, rgba(148,187,233,1) 100%);
+    }
+    .login-container {
+      background: #fff;
+      padding: 2rem;
+      border-radius: 15px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+      width: 360px;
+      text-align: center;
+    }
+    .login-container h2 {
+      margin-bottom: 16px;
+      color: #333;
+    }
+    .login-container input {
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+    .login-container button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 12px;
+      border: none;
+      border-radius: 8px;
+      background: #4e54c8;
+      color: #fff;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .login-container button:hover {
+      background: #3b3fc1;
+    }
+    .error {
+      color: red;
+      margin-top: 10px;
+      font-size: 14px;
+      min-height: 18px;
+    }
+    .small {
+      font-size: 13px;
+      color: #555;
+      margin-top: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <h2>Parking Management Login</h2>
+    <input type="text" id="username" placeholder="Username" value="admin" required />
+    <input type="password" id="password" placeholder="Password" value="1234" required />
+    <div class="error" id="errorMsg"></div>
+    <button onclick="login()">Login</button>
+    <div class="small">Demo credentials: <strong>admin / 1234</strong></div>
+  </div>
+
+  <script>
+    function login() {
+      const user = document.getElementById('username').value.trim();
+      const pass = document.getElementById('password').value.trim();
+      const error = document.getElementById('errorMsg');
+      if (user === 'admin' && pass === '1234') {
+        localStorage.setItem('parking_logged_in', 'true');
+        window.location.href = 'dashboard.html';
+      } else {
+        error.textContent = 'Invalid username or password.';
+      }
+    }
+  </script>
+</body>
+</html>

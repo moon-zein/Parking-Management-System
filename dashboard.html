@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Parking Management - Dashboard</title>
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <section id="sidebar">
+    <div class="brand">
+      <i class="bx bxs-car bx-lg"></i>
+      <span class="text">
+        <span class="full">Parking Management</span>
+        <span class="vertical">P<br>A<br>R<br>K<br>I<br>N<br>G</span>
+      </span>
+    </div>
+
+    <ul class="side-menu top">
+      <li class="active">
+        <a href="#">
+          <i class="bx bxs-dashboard bx-sm"></i>
+          <span class="text">Dashboard</span>
+        </a>
+      </li>
+    </ul>
+
+    <ul class="side-menu bottom">
+      <li>
+        <a href="#" onclick="addSlot()">
+          <i class="bx bx-plus-circle"></i>
+          <span class="text">Add Slot</span>
+        </a>
+      </li>
+      <li>
+        <a href="#" onclick="resetData()">
+          <i class="bx bx-reset"></i>
+          <span class="text">Reset Demo</span>
+        </a>
+      </li>
+      <li>
+        <a onclick="logout()" class="logout">
+          <i class="bx bx-power-off"></i>
+          <span class="text">Logout</span>
+        </a>
+      </li>
+    </ul>
+  </section>
+
+  <section id="content">
+    <nav>
+      <i class="bx bx-menu" id="menu-toggle"></i>
+
+      <form action="#">
+        <div class="form-input">
+          <input type="search" placeholder="Search..." />
+          <button type="submit" class="search-btn">
+            <i class="bx bx-search"></i>
+          </button>
+        </div>
+      </form>
+
+      <div class="nav-right">
+        <input type="checkbox" class="checkbox" id="switch-mode" hidden />
+        <label class="swith-lm" for="switch-mode">
+          <i class="bx bxs-moon"></i>
+          <i class="bx bx-sun"></i>
+          <div class="ball"></div>
+        </label>
+
+        <i class="bx bx-bell"></i>
+        <img src="C:\Users\HP\Desktop\parking\Logoa.png" alt="User" class="profile-img" />
+      </div>
+    </nav>
+
+    <main>
+      <div class="head-title">
+        <div class="left">
+          <h1>Dashboard</h1>
+          <ul class="breadcrumb">
+            <li><a href="#">Dashboard</a></li>
+            <li><i class='bx bx-chevron-right'></i></li>
+            <li><a class="active" href="#">Home</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <ul class="box-info">
+        <li><i class='bx bxs-calendar-check'></i><span class="text"><h3 id="statTotal">0</h3><p>Total Slots</p></span></li>
+        <li><i class='bx bxs-group'></i><span class="text"><h3 id="statOccupied">0</h3><p>Occupied</p></span></li>
+        <li><i class='bx bxs-pin'></i><span class="text"><h3 id="statReserved">0</h3><p>Reserved</p></span></li>
+        <li><i class='bx bxs-car'></i><span class="text"><h3 id="statAvailable">0</h3><p>Available</p></span></li>
+      </ul>
+
+      <div class="table-data">
+        <div class="order">
+          <div class="head"><h3>Parking Slots</h3></div>
+          <p class="kv">Right-click a free slot to make a reservation. Click a slot to manage entry/exit.</p>
+          <div id="slotsContainer" class="slots-grid"></div>
+        </div>
+
+        <div class="todo">
+          <div class="head"><h3>Quick Actions</h3></div>
+          <div class="controls">
+            <button class="btn" onclick="showModal('entryModal')">Quick Entry (choose slot)</button>
+            <button class="btn secondary" onclick="showModal('reserveModal')">Reserve Slot</button>
+            <button class="btn warn" onclick="showModal('extendModal')">Extend Time</button>
+          </div>
+
+          <div style="margin-top:12px">
+            <h4>Recent Activity</h4>
+            <ul id="recentList" style="margin-top:8px; font-size:13px; color:#444">
+              <li>— Demo started</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </main>
+  </section>
+
+  <div id="modalBackdrop" class="modal-backdrop">
+    <div id="entryModal" class="modal" style="display:none">
+      <h3>Vehicle Entry</h3>
+      <form id="entryForm">
+        <div class="form-row"><label>Selected Slot</label><div id="slotId">Pick a slot</div></div>
+        <div class="form-row"><label>Slot #</label><input id="selectedSlotId" type="number" min="1" /></div>
+        <div class="form-row"><label>Plate</label><input id="entryPlate" type="text" required /></div>
+        <div class="form-row"><label>Auto assign</label><input id="autoAssign" type="checkbox" /></div>
+        <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px">
+          <button class="btn secondary" type="button" onclick="hideModal('entryModal')">Cancel</button>
+          <button class="btn" type="submit">Park Vehicle</button>
+        </div>
+      </form>
+    </div>
+
+    <div id="exitModal" class="modal" style="display:none">
+      <h3>Vehicle Exit</h3>
+      <div id="exitInfo" class="kv" style="margin-bottom:8px"></div>
+      <div class="form-row"><label>Hours</label><div id="exitHours">0</div></div>
+      <div class="form-row"><label>Fee</label><div id="exitFee">0</div></div>
+      <form id="exitForm">
+        <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px">
+          <button class="btn secondary" type="button" onclick="hideModal('exitModal')">Cancel</button>
+          <button class="btn" type="submit">Process Payment & Exit</button>
+        </div>
+      </form>
+    </div>
+
+    <div id="reserveModal" class="modal" style="display:none">
+      <h3>Reserve Slot</h3>
+      <form id="reserveForm">
+        <div class="form-row"><label>Slot #</label><input id="reserveSlotId" type="number" min="1" required /></div>
+        <div class="form-row"><label>Plate / Name</label><input id="reservePlate" type="text" /></div>
+        <div class="form-row">
+          <label>Duration (hrs)</label>
+          <select id="reserveDuration">
+            <option value="1">1 hour</option>
+            <option value="2">2 hours</option>
+            <option value="4">4 hours</option>
+            <option value="8">8 hours</option>
+          </select>
+        </div>
+        <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px">
+          <button class="btn secondary" type="button" onclick="hideModal('reserveModal')">Cancel</button>
+          <button class="btn" type="submit">Confirm Reservation</button>
+        </div>
+      </form>
+    </div>
+
+    <div id="reserveViewModal" class="modal" style="display:none">
+      <h3>Reservation Details</h3>
+      <div class="form-row"><label>Slot</label><div id="slotId">-</div></div>
+      <div class="form-row"><label>Plate/Info</label><div id="resPlate">-</div></div>
+      <div class="form-row"><label>Reserved Until</label><div id="resUntil">-</div></div>
+      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px">
+        <button class="btn secondary" type="button" onclick="cancelReservation()">Cancel Reservation</button>
+        <button class="btn" type="button" onclick="hideModal('reserveViewModal')">Close</button>
+      </div>
+    </div>
+
+    <div id="extendModal" class="modal" style="display:none">
+      <h3>Extend Time</h3>
+      <form id="extendForm">
+        <div class="form-row"><label>Slot #</label><input id="extendSlotId" type="number" min="1" required /></div>
+        <div class="form-row"><label>Add Hours</label><input id="extendHours" type="number" min="1" value="1" /></div>
+        <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px">
+          <button class="btn secondary" type="button" onclick="hideModal('extendModal')">Cancel</button>
+          <button class="btn" type="submit">Extend</button>
+        </div>
+      </form>
+    </div>
+  </div>
+    
+
+  <script src="script.js"></script>
+  <script>
+    if (!localStorage.getItem('parking_logged_in')) { 
+      window.location.href = 'index.html'; 
+    }
+    function logout() { 
+      localStorage.removeItem('parking_logged_in'); 
+      window.location.href = 'index.html'; 
+    }
+  </script>
+</body>
+</html>
